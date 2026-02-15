@@ -5,29 +5,41 @@ import { auth } from './firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import './Men.css';
 
-// SVG Icons
+// --- FIXED SVG ICONS ---
 const IconBack = () => (
   <svg 
     width="24" 
     height="24" 
-    viewBox="4 4 16 16" /* This 'crops' the empty space around the arrow */
+    viewBox="0 0 24 24" 
     fill="none" 
     stroke="currentColor" 
-    strokeWidth="3"     /* Thicker lines for better visibility */
+    strokeWidth="3" 
     strokeLinecap="round" 
     strokeLinejoin="round"
-    style={{ display: 'block' }}
   >
     <path d="M15 18l-6-6 6-6" />
   </svg>
-);const IconBag = () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>;
-const IconTrash = () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d32f2f" strokeWidth="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>;
+);
+
+const IconBag = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+    <line x1="3" y1="6" x2="21" y2="6"></line>
+    <path d="M16 10a4 4 0 0 1-8 0"></path>
+  </svg>
+);
+
+const IconTrash = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d32f2f" strokeWidth="2">
+    <polyline points="3 6 5 6 21 6"></polyline>
+    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+  </svg>
+);
 
 export default function Men() {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  
   const [bag, setBag] = useState([]);
   const [showSizeModal, setShowSizeModal] = useState(null); 
   const [showCheckout, setShowCheckout] = useState(false);
@@ -95,7 +107,9 @@ export default function Men() {
   return (
     <div className="men-page">
       <nav className="collection-nav">
-        <button className="back-circle-btn" onClick={() => navigate('/')}><IconBack /></button>
+        <button className="back-circle-btn" onClick={() => navigate('/')}>
+          <IconBack />
+        </button>
         <h1 className="collection-logo">Thread and Hanger <span>MEN</span></h1>
         
         <div className="bag-container" onClick={() => bag.length > 0 && setShowCheckout(true)}>
@@ -127,7 +141,7 @@ export default function Men() {
         )}
       </main>
 
-      {/* SIZE SELECTION MODAL - Fixed Size */}
+      {/* MODALS REMAIN THE SAME... */}
       {showSizeModal && (
         <div className="modal-overlay" onClick={() => setShowSizeModal(null)}>
           <div className="modal-content size-modal animate-pop" onClick={e => e.stopPropagation()}>
@@ -145,7 +159,6 @@ export default function Men() {
         </div>
       )}
 
-      {/* CHECKOUT MODAL - With Delete Icon */}
       {showCheckout && (
         <div className="modal-overlay" onClick={() => setShowCheckout(null)}>
           <div className="modal-content checkout-modal animate-pop" onClick={e => e.stopPropagation()}>
@@ -168,9 +181,7 @@ export default function Men() {
               <input type="text" placeholder="Full Name" required onChange={e => setOrderInfo({...orderInfo, name: e.target.value})} />
               <input type="tel" placeholder="Phone Number" required onChange={e => setOrderInfo({...orderInfo, phone: e.target.value})} />
               <textarea placeholder="Delivery Address" required onChange={e => setOrderInfo({...orderInfo, address: e.target.value})} />
-              <button type="submit" className="confirm-btn" disabled={orderLoading}>
-                {orderLoading ? "Confirm Order" : "Confirm Order"}
-              </button>
+              <button type="submit" className="confirm-btn" disabled={orderLoading}>Confirm Order</button>
             </form>
           </div>
         </div>
