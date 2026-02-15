@@ -3,30 +3,42 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from './supabaseClient';
 import './Women.css';
 
-// SVG Icons
+// --- FIXED SVG ICONS ---
 const IconBack = () => (
   <svg 
     width="24" 
     height="24" 
-    viewBox="4 4 16 16" /* This 'crops' the empty space around the arrow */
+    viewBox="0 0 24 24" 
     fill="none" 
     stroke="currentColor" 
-    strokeWidth="3"     /* Thicker lines for better visibility */
+    strokeWidth="3" 
     strokeLinecap="round" 
     strokeLinejoin="round"
-    style={{ display: 'block' }}
   >
     <path d="M15 18l-6-6 6-6" />
   </svg>
-);const IconBag = () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>;
-const IconTrash = () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d32f2f" strokeWidth="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>;
+);
+
+const IconBag = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+    <line x1="3" y1="6" x2="21" y2="6"></line>
+    <path d="M16 10a4 4 0 0 1-8 0"></path>
+  </svg>
+);
+
+const IconTrash = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d32f2f" strokeWidth="2">
+    <polyline points="3 6 5 6 21 6"></polyline>
+    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+  </svg>
+);
 
 export default function Women() {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   
-  // BAG STATES
   const [bag, setBag] = useState([]);
   const [showSizeModal, setShowSizeModal] = useState(null); 
   const [showCheckout, setShowCheckout] = useState(false);
@@ -42,7 +54,6 @@ export default function Women() {
   async function fetchWomenProducts() {
     setLoading(true);
     try {
-      // Filters specifically for Women's collection
       const { data, error } = await supabase.from('products').select('*').eq('category', 'Women');
       if (error) throw error;
       setProducts(data || []);
@@ -70,7 +81,7 @@ export default function Women() {
     setOrderLoading(true);
     try {
       const orderRows = bag.map(item => ({
-        product_id: item.product_id, // Matches your fixed product_id column
+        product_id: item.product_id,
         customer_name: orderInfo.name,
         phone: orderInfo.phone,
         address: orderInfo.address,
@@ -97,8 +108,10 @@ export default function Women() {
   return (
     <div className="women-page">
       <nav className="collection-nav">
-        <button className="back-circle-btn" onClick={() => navigate('/')}><IconBack /></button>
-        <h1 className="collection-logo">T&H <span>WOMEN</span></h1>
+        <button className="back-circle-btn" onClick={() => navigate('/')}>
+          <IconBack />
+        </button>
+        <h1 className="collection-logo">Thread and Hanger <span>WOMEN</span></h1>
         
         <div className="bag-container" onClick={() => bag.length > 0 && setShowCheckout(true)}>
           <IconBag />
@@ -140,14 +153,16 @@ export default function Women() {
       {showSizeModal && (
         <div className="modal-overlay" onClick={() => setShowSizeModal(null)}>
           <div className="modal-content size-modal animate-pop" onClick={e => e.stopPropagation()}>
-            <h3>Select Size</h3>
-            <p className="item-subname">{showSizeModal.name}</p>
-            <div className="size-options">
-              {showSizeModal.sizes?.map(size => (
-                <button key={size} onClick={() => addToBag(size)}>{size}</button>
-              ))}
+            <div className="modal-inner">
+              <h3>Select Size</h3>
+              <p className="item-subname">{showSizeModal.name}</p>
+              <div className="size-options">
+                {showSizeModal.sizes?.map(size => (
+                  <button key={size} onClick={() => addToBag(size)}>{size}</button>
+                ))}
+              </div>
+              <button className="cancel-text-btn" onClick={() => setShowSizeModal(null)}>Cancel</button>
             </div>
-            <button className="cancel-text-btn" onClick={() => setShowSizeModal(null)}>Cancel</button>
           </div>
         </div>
       )}
@@ -171,7 +186,7 @@ export default function Women() {
                 </div>
               ))}
               <div className="total-row">
-                <strong>Total Amount:</strong>
+                <strong>Total:</strong>
                 <strong>PKR {calculateTotal().toLocaleString()}</strong>
               </div>
             </div>
