@@ -53,7 +53,6 @@ html, body, #root {
 
 .site-logo { 
   height: 45px; 
-  filter: invert(1); 
   cursor: pointer;
 }
 

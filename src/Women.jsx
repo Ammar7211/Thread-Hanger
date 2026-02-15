@@ -114,7 +114,7 @@ export default function Women() {
         <button className="back-circle-btn" onClick={() => navigate('/')}>
           <IconBack />
         </button>
-        <h1 className="collection-logo">Thread and Hanger <span>WOMEN</span></h1>
+        <h1 className="collection-logo">RepYo City <span>WOMEN</span></h1>
         
         <div className="bag-container" onClick={() => bag.length > 0 && setShowCheckout(true)}>
           <IconBag />
