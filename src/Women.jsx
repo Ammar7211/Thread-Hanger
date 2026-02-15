@@ -3,18 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from './supabaseClient';
 import './Women.css';
 
-// --- FIXED SVG ICONS ---
+// --- ICONS ---
 const IconBack = () => (
-  <svg 
-    width="24" 
-    height="24" 
-    viewBox="0 0 24 24" 
-    fill="none" 
-    stroke="currentColor" 
-    strokeWidth="3" 
-    strokeLinecap="round" 
-    strokeLinejoin="round"
-  >
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
     <path d="M15 18l-6-6 6-6" />
   </svg>
 );
@@ -38,7 +29,6 @@ export default function Women() {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  
   const [bag, setBag] = useState([]);
   const [showSizeModal, setShowSizeModal] = useState(null); 
   const [showCheckout, setShowCheckout] = useState(false);
@@ -57,16 +47,29 @@ export default function Women() {
       const { data, error } = await supabase.from('products').select('*').eq('category', 'Women');
       if (error) throw error;
       setProducts(data || []);
-    } catch (err) { console.error(err.message); }
-    finally { setLoading(false); }
+    } catch (err) { 
+      console.error("Fetch Error:", err.message); 
+    } finally { 
+      setLoading(false); 
+    }
   }
 
+  // --- IMPROVED ADD TO BAG LOGIC ---
   const addToBag = (size) => {
-    const newItem = { ...showSizeModal, selectedSize: size, tempId: Date.now() };
+    if (!showSizeModal) return;
+
+    const newItem = { 
+      ...showSizeModal, 
+      selectedSize: size, 
+      tempId: Date.now() 
+    };
+
     const updatedBag = [...bag, newItem];
     setBag(updatedBag);
     localStorage.setItem('boutique_bag', JSON.stringify(updatedBag));
-    setShowSizeModal(null);
+    
+    console.log("Added to Bag:", newItem);
+    setShowSizeModal(null); // Close modal after adding
   };
 
   const removeFromBag = (tempId) => {
@@ -97,7 +100,7 @@ export default function Women() {
       localStorage.removeItem('boutique_bag');
       setShowCheckout(false);
     } catch (err) {
-      alert("Error: " + err.message);
+      alert("Order Error: " + err.message);
     } finally {
       setOrderLoading(false);
     }
@@ -129,8 +132,17 @@ export default function Women() {
                 <div key={item.product_id} className="product-card">
                   <div className="image-frame">
                     <img src={item.image_url} alt={item.name} loading="lazy" />
+                    {/* The Hover Overlay */}
                     <div className="hover-overlay">
-                      <button className="quick-add" onClick={() => setShowSizeModal(item)}>ADD TO BAG</button>
+                      <button 
+                        className="quick-add" 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowSizeModal(item);
+                        }}
+                      >
+                        ADD TO BAG
+                      </button>
                     </div>
                   </div>
                   <div className="product-meta">
@@ -157,9 +169,14 @@ export default function Women() {
               <h3>Select Size</h3>
               <p className="item-subname">{showSizeModal.name}</p>
               <div className="size-options">
-                {showSizeModal.sizes?.map(size => (
-                  <button key={size} onClick={() => addToBag(size)}>{size}</button>
-                ))}
+                {/* Check if sizes exist to prevent errors */}
+                {showSizeModal.sizes && showSizeModal.sizes.length > 0 ? (
+                  showSizeModal.sizes.map(size => (
+                    <button key={size} onClick={() => addToBag(size)}>{size}</button>
+                  ))
+                ) : (
+                  <p>No sizes listed for this item.</p>
+                )}
               </div>
               <button className="cancel-text-btn" onClick={() => setShowSizeModal(null)}>Cancel</button>
             </div>
