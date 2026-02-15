@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "react-router-dom": "^7.13.0"
+  },
+  "scripts": {
+  "predeploy": "npm run build",
+  "deploy": "gh-pages -d dist"
+}
+}
