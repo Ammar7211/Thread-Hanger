@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Routes, Route, useNavigate, Navigate, HashRouter as Router } from 'react-router-dom';
+import { Routes, Route, useNavigate, Navigate, BrowserRouter as Router } from 'react-router-dom';
 import { auth } from './firebase'; 
 import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import Admin from './Admin';
@@ -37,7 +37,9 @@ function HomePage() {
     <div className="app-container">
       <header className="site-header">
         <div className="header-content">
-          <img src="logo.png" alt="Logo" className="site-logo" onClick={() => navigate('/')} />
+          <div className="logo-container">
+            <img src="logo.png" alt="Logo" className="site-logo" onClick={() => navigate('/')} />
+          </div>
           <div className="header-links">
             <span onClick={() => navigate('/men')}>MEN</span>
             <span onClick={() => navigate('/women')}>WOMEN</span>
@@ -90,18 +92,8 @@ function HomePage() {
           <div className="login-modal animate-in">
             <h3>Admin Access</h3>
             <form onSubmit={handleLogin}>
-              <input 
-                type="email" 
-                placeholder="Admin Email" 
-                required 
-                onChange={e => setEmail(e.target.value)} 
-              />
-              <input 
-                type="password" 
-                placeholder="Password" 
-                required 
-                onChange={e => setPassword(e.target.value)} 
-              />
+              <input type="email" placeholder="Admin Email" required onChange={e => setEmail(e.target.value)} />
+              <input type="password" placeholder="Password" required onChange={e => setPassword(e.target.value)} />
               {error && <p className="login-error">{error}</p>}
               <div className="login-actions">
                 <button type="button" onClick={() => setShowLogin(false)} className="cancel-btn">Cancel</button>
@@ -136,11 +128,7 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/men" element={<Men />} />
         <Route path="/women" element={<Women />} />
-        <Route 
-          path="/admin" 
-          element={user ? <Admin /> : <Navigate to="/" replace />} 
-        />
-        {/* Redirect any unknown routes back to home */}
+        <Route path="/admin" element={user ? <Admin /> : <Navigate to="/" replace />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
