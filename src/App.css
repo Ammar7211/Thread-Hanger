@@ -352,3 +352,30 @@ html, body, #root {
     font-size: 14px;
   }
 }
+/* --- Login Modal Dark Mode Fix --- */
+.login-modal input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  
+  /* Force black text and white background for dark mode users */
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+/* Fix for browser Autofill (often turns text white/yellow) */
+.login-modal input:-webkit-autofill,
+.login-modal input:-webkit-autofill:hover, 
+.login-modal input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #000000 !important;
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.login-modal h3 {
+  color: #111; /* Ensure the "Admin Access" header is also black */
+  margin-bottom: 20px;
+}
